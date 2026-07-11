@@ -1,0 +1,27 @@
+blog-bridge:
+  api:
+    forbidden: You don't have permission to promote discussions to the blog.
+    not_configured: Blog Bridge isn't configured yet. Add the Ghost URL and Admin API key in the extension settings.
+    no_content: This discussion has no post content to promote.
+    a_member: a member
+    source_line: "Originally posted by {author} on {link}."
+
+  forum:
+    promote: Promote to blog
+    update_on_blog: Update blog post
+    view_on_blog: View on blog
+    confirm_publish: "Publish “{title}” to the blog now? It will go live immediately."
+    confirm_update: "Re-publish “{title}” to the blog? This updates the existing post."
+    working: Publishing to the blog…
+    success: Published to the blog.
+
+  admin:
+    ghost_url_label: Ghost site URL
+    ghost_url_help: The public URL of your Ghost blog, e.g. https://shatteredpact.com — it must match the URL configured in Ghost.
+    admin_key_label: Ghost Admin API key
+    admin_key_help: Create a Custom Integration in Ghost (Settings → Advanced → Integrations) and paste its Admin API key here. Format is id:secret.
+    status_label: On promote
+    status_help: Whether promoting creates a live post or an unpublished draft in Ghost.
+    status_published: Publish immediately
+    status_draft: Create a draft
+    permission_label: Promote discussions to the blog

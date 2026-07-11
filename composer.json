@@ -1,0 +1,39 @@
+{
+    "name": "ernestdefoe/blog-bridge",
+    "description": "Promote a forum discussion to a Ghost blog post in one click — staff-gated, tag-mapped, idempotent.",
+    "type": "flarum-extension",
+    "keywords": ["flarum", "ghost", "blog", "promote", "cross-post"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ernest Defoe",
+            "email": "ernestdefoe@gmail.com"
+        }
+    ],
+    "homepage": "https://github.com/ernestdefoe/blog-bridge",
+    "require": {
+        "flarum/core": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ErnestDefoe\\BlogBridge\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Blog Bridge",
+            "category": "feature",
+            "icon": {
+                "name": "fas fa-ghost",
+                "backgroundColor": "#15171a",
+                "color": "#f6c453"
+            }
+        },
+        "flarum-cli": {
+            "modules": {
+                "admin": true,
+                "forum": true
+            }
+        }
+    }
+}

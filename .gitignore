@@ -1,0 +1,4 @@
+/vendor
+/js/node_modules
+/js/dist/*.js.LICENSE.txt
+composer.lock

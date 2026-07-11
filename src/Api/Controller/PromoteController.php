@@ -4,7 +4,6 @@ namespace ErnestDefoe\BlogBridge\Api\Controller;
 
 use ErnestDefoe\BlogBridge\Ghost\GhostClient;
 use Flarum\Discussion\Discussion;
-use Flarum\Formatter\Formatter;
 use Flarum\Http\RequestUtil;
 use Flarum\Http\UrlGenerator;
 use Flarum\Locale\Translator;
@@ -20,7 +19,6 @@ class PromoteController implements RequestHandlerInterface
 {
     public function __construct(
         protected GhostClient $ghost,
-        protected Formatter $formatter,
         protected UrlGenerator $url,
         protected SettingsRepositoryInterface $settings,
         protected Translator $translator,
@@ -51,7 +49,7 @@ class PromoteController implements RequestHandlerInterface
         $forumUrl = $this->url->to('forum')->route('discussion', ['id' => $discussion->id]);
         $authorName = $discussion->user?->display_name ?? $this->translator->trans('blog-bridge.api.a_member');
 
-        $html = $this->formatter->render((string) $post->content, $post, $request);
+        $html = $post->formatContent($request);
         $html .= sprintf(
             '<hr><p><em>%s</em></p>',
             $this->translator->trans('blog-bridge.api.source_line', [

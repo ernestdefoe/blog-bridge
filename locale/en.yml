@@ -10,6 +10,7 @@ blog-bridge:
     promote: Promote to blog
     update_on_blog: Update blog post
     view_on_blog: View on blog
+    also_on_blog: This post also lives on the blog
     confirm_publish: "Publish “{title}” to the blog now? It will go live immediately."
     confirm_update: "Re-publish “{title}” to the blog? This updates the existing post."
     working: Publishing to the blog…

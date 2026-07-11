@@ -4,3 +4,38 @@
 .item-viewOnBlog .Button-icon {
   color: #f6c453;
 }
+
+// "This post also lives on the blog" — a subtle pill under the discussion title.
+.BlogBacklink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted-color);
+  background: var(--control-bg);
+  border: 1px solid var(--control-color);
+
+  &:hover {
+    color: var(--link-color);
+    text-decoration: none;
+    border-color: var(--link-color);
+  }
+
+  .BlogBacklink-icon {
+    color: #f6c453;
+  }
+
+  .BlogBacklink-arrow {
+    font-size: 11px;
+    opacity: 0.7;
+    transition: transform 0.15s ease;
+  }
+
+  &:hover .BlogBacklink-arrow {
+    transform: translateX(2px);
+  }
+}

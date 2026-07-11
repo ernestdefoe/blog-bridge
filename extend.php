@@ -6,7 +6,9 @@
 
 namespace ErnestDefoe\BlogBridge;
 
-use Flarum\Api\Serializer\DiscussionSerializer;
+use Flarum\Api\Context;
+use Flarum\Api\Resource\DiscussionResource;
+use Flarum\Api\Schema;
 use Flarum\Discussion\Discussion;
 use Flarum\Extend;
 
@@ -25,13 +27,14 @@ return [
 
     // Expose, per discussion, whether the current actor may promote it and where it already lives
     // on the blog — the forum control reads both to decide "Promote" vs "View on blog".
-    (new Extend\ApiSerializer(DiscussionSerializer::class))
-        ->attributes(function (DiscussionSerializer $serializer, Discussion $discussion, array $attributes): array {
-            $attributes['canPromoteToBlog'] = $serializer->getActor()->hasPermission('discussion.promoteToBlog');
-            $attributes['blogUrl'] = $discussion->blog_url;
-
-            return $attributes;
-        }),
+    (new Extend\ApiResource(DiscussionResource::class))
+        ->fields(fn () => [
+            Schema\Boolean::make('canPromoteToBlog')
+                ->get(fn (Discussion $discussion, Context $context) => $context->getActor()->hasPermission('discussion.promoteToBlog')),
+            Schema\Str::make('blogUrl')
+                ->nullable()
+                ->get(fn (Discussion $discussion) => $discussion->blog_url),
+        ]),
 
     // The 'discussion.promoteToBlog' permission row is registered in the admin frontend
     // (js/src/admin) so it shows in the permissions grid; admins bypass it, moderators can be

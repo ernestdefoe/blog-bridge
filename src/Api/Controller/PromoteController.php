@@ -7,7 +7,9 @@ use Flarum\Discussion\Discussion;
 use Flarum\Http\RequestUtil;
 use Flarum\Http\UrlGenerator;
 use Flarum\Locale\Translator;
+use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\Guest;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Arr;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -39,11 +41,19 @@ class PromoteController implements RequestHandlerInterface
         }
 
         /** @var Discussion $discussion */
-        $discussion = Discussion::query()->with(['firstPost', 'user'])->findOrFail(Arr::get($request->getQueryParams(), 'id'));
+        $discussion = Discussion::whereVisibleTo($actor)->with(['firstPost', 'user'])->findOrFail(Arr::get($request->getQueryParams(), 'id'));
         $post = $discussion->firstPost;
 
         if (! $post || $post->type !== 'comment') {
             return $this->error(422, $this->translator->trans('blog-bridge.api.no_content'));
+        }
+
+        // The blog is public: only a discussion (and opening post) a guest can already read
+        // may go there. Private, restricted-tag, hidden or unapproved content stays on the forum.
+        $guest = new Guest();
+        if (! Discussion::whereVisibleTo($guest)->whereKey($discussion->id)->exists()
+            || ! Post::whereVisibleTo($guest)->whereKey($post->id)->exists()) {
+            return $this->error(403, $this->translator->trans('blog-bridge.api.not_public'));
         }
 
         $forumUrl = $this->url->to('forum')->route('discussion', ['id' => $discussion->id]);

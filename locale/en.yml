@@ -3,6 +3,7 @@ blog-bridge:
     forbidden: You don't have permission to promote discussions to the blog.
     not_configured: Blog Bridge isn't configured yet. Add the Ghost URL and Admin API key in the extension settings.
     no_content: This discussion has no post content to promote.
+    not_public: Only a discussion guests can read can go on the blog. This one is private, restricted or awaiting approval.
     a_member: a member
     source_line: "Originally posted by {author} on {link}."
 

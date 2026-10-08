@@ -7,6 +7,7 @@ use Flarum\Discussion\Discussion;
 use Flarum\Http\RequestUtil;
 use Flarum\Http\UrlGenerator;
 use Flarum\Locale\Translator;
+use Flarum\Post\CommentPost;
 use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Guest;
@@ -44,7 +45,7 @@ class PromoteController implements RequestHandlerInterface
         $discussion = Discussion::whereVisibleTo($actor)->with(['firstPost', 'user'])->findOrFail(Arr::get($request->getQueryParams(), 'id'));
         $post = $discussion->firstPost;
 
-        if (! $post || $post->type !== 'comment') {
+        if (! $post instanceof CommentPost) {
             return $this->error(422, $this->translator->trans('blog-bridge.api.no_content'));
         }
 
@@ -57,7 +58,7 @@ class PromoteController implements RequestHandlerInterface
         }
 
         $forumUrl = $this->url->to('forum')->route('discussion', ['id' => $discussion->id]);
-        $authorName = $discussion->user?->display_name ?? $this->translator->trans('blog-bridge.api.a_member');
+        $authorName = $discussion->user->display_name ?? $this->translator->trans('blog-bridge.api.a_member');
 
         $html = $post->formatContent($request);
         $html .= sprintf(
@@ -85,8 +86,9 @@ class PromoteController implements RequestHandlerInterface
             return $this->error(502, GhostClient::errorMessage($e));
         }
 
-        $discussion->blog_post_id = $result['id'];
-        $discussion->blog_url = $result['url'];
+        // This extension's own columns on discussions, not declared properties.
+        $discussion->setAttribute('blog_post_id', $result['id']);
+        $discussion->setAttribute('blog_url', $result['url']);
         $discussion->save();
 
         return new JsonResponse(['url' => $result['url']]);

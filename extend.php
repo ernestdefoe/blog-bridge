@@ -33,7 +33,7 @@ return [
                 ->get(fn (Discussion $discussion, Context $context) => $context->getActor()->hasPermission('discussion.promoteToBlog')),
             Schema\Str::make('blogUrl')
                 ->nullable()
-                ->get(fn (Discussion $discussion) => $discussion->blog_url),
+                ->get(fn (Discussion $discussion) => $discussion->getAttribute('blog_url')),
         ]),
 
     // The 'discussion.promoteToBlog' permission row is registered in the admin frontend

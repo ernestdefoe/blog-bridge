@@ -104,7 +104,7 @@ class PromoteController implements RequestHandlerInterface
      */
     protected function tags(Discussion $discussion): array
     {
-        $tags = [['name' => '#forum-' . $discussion->id]];
+        $tags = [['name' => '#forum-'.$discussion->id]];
 
         // Not method_exists($discussion, 'tags'): flarum/tags adds that relation
         // at runtime, so the method never exists and no tag was ever sent.

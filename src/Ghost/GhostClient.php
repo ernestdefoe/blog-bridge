@@ -31,7 +31,7 @@ class GhostClient
 
     protected function base(): string
     {
-        return $this->url() . '/ghost/api/admin';
+        return $this->url().'/ghost/api/admin';
     }
 
     protected function token(): string
@@ -51,9 +51,9 @@ class GhostClient
     protected function client(): Client
     {
         return new Client([
-            'base_uri' => $this->base() . '/',
+            'base_uri' => $this->base().'/',
             'headers' => [
-                'Authorization' => 'Ghost ' . $this->token(),
+                'Authorization' => 'Ghost '.$this->token(),
                 'Accept-Version' => 'v5.0',
             ],
             'http_errors' => true,

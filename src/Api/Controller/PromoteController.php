@@ -4,6 +4,7 @@ namespace ErnestDefoe\BlogBridge\Api\Controller;
 
 use ErnestDefoe\BlogBridge\Ghost\GhostClient;
 use Flarum\Discussion\Discussion;
+use Flarum\Extension\ExtensionManager;
 use Flarum\Http\RequestUtil;
 use Flarum\Http\UrlGenerator;
 use Flarum\Locale\Translator;
@@ -25,6 +26,7 @@ class PromoteController implements RequestHandlerInterface
         protected UrlGenerator $url,
         protected SettingsRepositoryInterface $settings,
         protected Translator $translator,
+        protected ExtensionManager $extensions,
     ) {
     }
 
@@ -104,8 +106,10 @@ class PromoteController implements RequestHandlerInterface
     {
         $tags = [['name' => '#forum-' . $discussion->id]];
 
-        if (class_exists(\Flarum\Tags\Tag::class) && method_exists($discussion, 'tags')) {
-            foreach ($discussion->tags as $tag) {
+        // Not method_exists($discussion, 'tags'): flarum/tags adds that relation
+        // at runtime, so the method never exists and no tag was ever sent.
+        if ($this->extensions->isEnabled('flarum-tags')) {
+            foreach ($discussion->getAttribute('tags') as $tag) {
                 if (! $tag->is_restricted) {
                     $tags[] = ['name' => $tag->name];
                 }

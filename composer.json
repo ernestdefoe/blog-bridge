@@ -2,7 +2,13 @@
     "name": "ernestdefoe/blog-bridge",
     "description": "Promote a forum discussion to a Ghost blog post in one click — staff-gated, tag-mapped, idempotent.",
     "type": "flarum-extension",
-    "keywords": ["flarum", "ghost", "blog", "promote", "cross-post"],
+    "keywords": [
+        "flarum",
+        "ghost",
+        "blog",
+        "promote",
+        "cross-post"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -17,6 +23,11 @@
     "autoload": {
         "psr-4": {
             "ErnestDefoe\\BlogBridge\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ErnestDefoe\\BlogBridge\\Tests\\": "tests/"
         }
     },
     "extra": {
@@ -35,5 +46,26 @@
                 "forum": true
             }
         }
-    }
+    },
+    "require-dev": {
+        "flarum/phpstan": "^2.0",
+        "flarum/tags": "^2.0",
+        "flarum/testing": "^2.0"
+    },
+    "scripts": {
+        "test": [
+            "@test:integration"
+        ],
+        "test:integration": "phpunit -c tests/phpunit.integration.xml",
+        "test:setup": "@php tests/integration/setup.php",
+        "analyse:phpstan": "phpstan analyse"
+    },
+    "scripts-descriptions": {
+        "test": "Runs all tests.",
+        "test:integration": "Runs all integration tests.",
+        "test:setup": "Sets up a database for use with integration tests. Execute this only once.",
+        "analyse:phpstan": "Run static analysis"
+    },
+    "minimum-stability": "beta",
+    "prefer-stable": true
 }

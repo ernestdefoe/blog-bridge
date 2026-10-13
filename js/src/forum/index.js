@@ -3,7 +3,7 @@ import app from 'flarum/forum/app';
 import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 import DiscussionHero from 'flarum/forum/components/DiscussionHero';
 import Button from 'flarum/common/components/Button';
-import icon from 'flarum/common/helpers/icon';
+import Icon from 'flarum/common/components/Icon';
 
 import promoteToBlog from './promoteToBlog';
 
@@ -18,9 +18,9 @@ app.initializers.add('ernestdefoe-blog-bridge', () => {
     items.add(
       'blogBacklink',
       <a className="BlogBacklink" href={url} target="_blank" rel="noopener noreferrer">
-        {icon('fas fa-ghost', { className: 'BlogBacklink-icon' })}
+        <Icon name="fas fa-ghost" className="BlogBacklink-icon" />
         <span className="BlogBacklink-label">{app.translator.trans('blog-bridge.forum.also_on_blog')}</span>
-        {icon('fas fa-arrow-right', { className: 'BlogBacklink-arrow' })}
+        <Icon name="fas fa-arrow-right" className="BlogBacklink-arrow" />
       </a>,
       90
     );

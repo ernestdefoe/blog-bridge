@@ -187,4 +187,18 @@ class PromoteTest extends TestCase
         $this->assertFalse($after['canPromoteToBlog']);
         $this->assertSame('https://blog.example.com/big-news/', $after['blogUrl']);
     }
+
+    #[Test]
+    public function promoters_are_told_whether_a_promote_makes_a_draft()
+    {
+        $forum = fn (?int $actor) => json_decode((string) $this->send($this->request('GET', '/api', array_filter(['authenticatedAs' => $actor])))->getBody(), true)['data']['attributes'];
+
+        $this->assertFalse($forum(3)['blogBridgeCreatesDraft'], 'the default publishes');
+        $this->assertArrayNotHasKey('blogBridgeCreatesDraft', $forum(2), 'only promoters need it');
+        $this->assertArrayNotHasKey('blogBridgeCreatesDraft', $forum(null));
+
+        $this->app()->getContainer()->make(SettingsRepositoryInterface::class)->set('blog-bridge.publish_status', 'draft');
+
+        $this->assertTrue($forum(3)['blogBridgeCreatesDraft']);
+    }
 }

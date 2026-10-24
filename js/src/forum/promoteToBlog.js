@@ -1,16 +1,14 @@
 import app from 'flarum/forum/app';
 import extractText from 'flarum/common/utils/extractText';
 
-// Publishes the discussion to the blog. Because promotion goes live immediately, a human
-// confirm() gate always stands between the click and the public post.
+// Sends the discussion to the blog behind a confirm() gate. The wording follows the
+// "On promote" setting: a live post or a Ghost draft.
 export default function promoteToBlog(discussion) {
   const promoted = !!discussion.attribute('blogUrl');
+  const draft = !!app.forum.attribute('blogBridgeCreatesDraft');
 
-  const confirmText = extractText(
-    app.translator.trans(promoted ? 'blog-bridge.forum.confirm_update' : 'blog-bridge.forum.confirm_publish', {
-      title: discussion.title(),
-    })
-  );
+  const confirmKey = promoted ? 'confirm_update' : draft ? 'confirm_draft' : 'confirm_publish';
+  const confirmText = extractText(app.translator.trans('blog-bridge.forum.' + confirmKey, { title: discussion.title() }));
 
   if (!confirm(confirmText)) return;
 
@@ -25,7 +23,10 @@ export default function promoteToBlog(discussion) {
     .then((res) => {
       app.alerts.dismiss(alert);
       discussion.pushAttributes({ blogUrl: res.url });
-      app.alerts.show({ type: 'success', dismissible: true }, app.translator.trans('blog-bridge.forum.success'));
+      app.alerts.show(
+        { type: 'success', dismissible: true },
+        app.translator.trans(draft ? 'blog-bridge.forum.success_draft' : 'blog-bridge.forum.success')
+      );
       if (res.url) window.open(res.url, '_blank');
     })
     .catch((e) => {

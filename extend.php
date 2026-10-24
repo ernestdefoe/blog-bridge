@@ -8,9 +8,11 @@ namespace ErnestDefoe\BlogBridge;
 
 use Flarum\Api\Context;
 use Flarum\Api\Resource\DiscussionResource;
+use Flarum\Api\Resource\ForumResource;
 use Flarum\Api\Schema;
 use Flarum\Discussion\Discussion;
 use Flarum\Extend;
+use Flarum\Settings\SettingsRepositoryInterface;
 
 return [
     (new Extend\Frontend('forum'))
@@ -34,6 +36,15 @@ return [
             Schema\Str::make('blogUrl')
                 ->nullable()
                 ->get(fn (Discussion $discussion) => $discussion->getAttribute('blog_url')),
+        ]),
+
+    // Tells those who can promote whether a promote creates a Ghost draft, so the confirmation
+    // says what will actually happen. Read from the cached settings: no query.
+    (new Extend\ApiResource(ForumResource::class))
+        ->fields(fn () => [
+            Schema\Boolean::make('blogBridgeCreatesDraft')
+                ->visible(fn ($forum, Context $context) => $context->getActor()->hasPermission('discussion.promoteToBlog'))
+                ->get(fn () => resolve(SettingsRepositoryInterface::class)->get('blog-bridge.publish_status') === 'draft'),
         ]),
 
     // The 'discussion.promoteToBlog' permission row is registered in the admin frontend

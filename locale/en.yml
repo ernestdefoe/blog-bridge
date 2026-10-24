@@ -13,9 +13,11 @@ blog-bridge:
     view_on_blog: View on blog
     also_on_blog: This post also lives on the blog
     confirm_publish: "Publish “{title}” to the blog now? It will go live immediately."
+    confirm_draft: "Send “{title}” to the blog as a draft? It stays unpublished until you publish it in Ghost."
     confirm_update: "Re-publish “{title}” to the blog? This updates the existing post."
     working: Publishing to the blog…
     success: Published to the blog.
+    success_draft: Saved to the blog as a draft.
 
   admin:
     ghost_url_label: Ghost site URL
